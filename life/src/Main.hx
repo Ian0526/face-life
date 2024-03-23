@@ -41,6 +41,8 @@ class Main extends App {
 	final tilesData:Uint32Array = new Uint32Array(TILES_TEX_WIDTH * TILES_TEX_HEIGHT * 4);
 	final topTilesData:Uint32Array = new Uint32Array(16 * 16 * 4);
 	var controller:Controller;
+	var pixelLevel:PixelLevel; 
+  	var pixelRenderer:PixelRenderer;
 
 	final text = Browser.document.getElementById("text");
 
@@ -255,6 +257,9 @@ class Main extends App {
 	function init():Void {
 		universe.scaleCamera(pot.width / 8);
 		universe.normalizeZoom(pot.width);
+
+		pixelLevel = new PixelLevel(128, 128);
+		pixelRenderer = new PixelRenderer();
 	}
 
 	override function update():Void {
@@ -300,6 +305,8 @@ class Main extends App {
 		heat = Math.log(speed) * 0.05;
 		g.defaultUniformMap.set(GolShader.uniforms.heat.name, Float(heat));
 
+		pixelLevel.update();
+    	pixelLevel.render(pixelRenderer);
 		// if (input.mouse.dright == 1)
 		// 	trace(universe.refLevel.toString(true));
 	}
